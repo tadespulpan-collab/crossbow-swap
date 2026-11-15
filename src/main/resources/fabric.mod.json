@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "crossbowswap",
+  "version": "${version}",
+  "name": "Crossbow Swap",
+  "description": "Left click with an empty crossbow to switch to a loaded crossbow in your hotbar.",
+  "authors": [],
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.example.crossbowswap.CrossbowSwapClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
