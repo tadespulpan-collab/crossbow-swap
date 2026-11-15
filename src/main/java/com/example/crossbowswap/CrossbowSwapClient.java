@@ -29,7 +29,7 @@ public class CrossbowSwapClient implements ClientModInitializer {
 
     private void trySwap(MinecraftClient client) {
         PlayerInventory inv = client.player.getInventory();
-        ItemStack held = inv.getMainHandStack();
+         ItemStack held = client.player.getMainHandStack();
 
         // Only act if the held item is an empty crossbow.
         if (!held.isOf(Items.CROSSBOW) || CrossbowItem.isCharged(held)) return;
