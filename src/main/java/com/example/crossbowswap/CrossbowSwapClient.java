@@ -9,27 +9,31 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
 public class CrossbowSwapClient implements ClientModInitializer {
-    private boolean wasDown = false;
+    private boolean wasUseDown = false;
 
     @Override
     public void onInitializeClient() {
         // START_CLIENT_TICK runs before the game processes input, so the new slot is already active for this click.
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
             if (client.player == null || client.currentScreen != null) {
-                wasDown = false;
+                wasUseDown = false;
                 return;
             }
-            boolean down = client.options.attackKey.isPressed();
-            if (down && !wasDown) {
+
+            boolean useDown = client.options.useKey.isPressed();
+
+            // Right click (new press only) with an empty crossbow -> switch to a loaded one.
+            if (useDown && !wasUseDown) {
                 trySwap(client);
             }
-            wasDown = down;
+
+            wasUseDown = useDown;
         });
     }
 
     private void trySwap(MinecraftClient client) {
         PlayerInventory inv = client.player.getInventory();
-         ItemStack held = client.player.getMainHandStack();
+        ItemStack held = client.player.getMainHandStack();
 
         // Only act if the held item is an empty crossbow.
         if (!held.isOf(Items.CROSSBOW) || CrossbowItem.isCharged(held)) return;
