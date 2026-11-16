@@ -14,7 +14,7 @@ public class CrossbowSwapClient implements ClientModInitializer {
     private static final int MIN_BOW_TICKS = 3;
 
     // Looking up is negative pitch. The bow triggers while your pitch is inside this range.
-    private static final float PITCH_MIN = -75.0f;
+    private static final float PITCH_MIN = -80.0f;
     private static final float PITCH_MAX = -70.0f;
 
     private boolean wasUseDown = false;
