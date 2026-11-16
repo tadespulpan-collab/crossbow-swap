@@ -9,6 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
 public class CrossbowSwapClient implements ClientModInitializer {
+    // Ticks of draw before the bow is released. 3 is the minimum that fires an arrow.
+    // If arrows don't fire, change this to 4.
+    private static final int MIN_BOW_TICKS = 3;
+
+    // Looking up is negative pitch. The bow auto-releases while your pitch is inside this range.
+    private static final float PITCH_MIN = -75.0f;
+    private static final float PITCH_MAX = -70.0f;
+
     private boolean wasUseDown = false;
 
     @Override
@@ -23,13 +31,23 @@ public class CrossbowSwapClient implements ClientModInitializer {
             boolean useDown = client.options.useKey.isPressed();
             boolean sneakDown = client.options.sneakKey.isPressed();
 
-            // Right click (new press only) with an empty crossbow -> switch to a loaded one.
+            // Crossbow: right click (new press only) with an empty crossbow -> switch to a loaded one.
             // Holding sneak turns the swap off so you can charge the empty crossbow normally.
             if (useDown && !wasUseDown && !sneakDown) {
                 trySwap(client);
             }
-
             wasUseDown = useDown;
+
+            // Bow: while drawing a bow with your pitch between -75 and -70, release at minimum charge.
+            // Your aim is never touched, you still point the bow yourself.
+            float pitch = client.player.getPitch();
+            if (pitch >= PITCH_MIN && pitch <= PITCH_MAX
+                    && client.interactionManager != null
+                    && client.player.isUsingItem()
+                    && client.player.getActiveItem().isOf(Items.BOW)
+                    && client.player.getItemUseTime() >= MIN_BOW_TICKS) {
+                client.interactionManager.stopUsingItem(client.player);
+            }
         });
     }
 
