@@ -21,9 +21,11 @@ public class CrossbowSwapClient implements ClientModInitializer {
             }
 
             boolean useDown = client.options.useKey.isPressed();
+            boolean sneakDown = client.options.sneakKey.isPressed();
 
             // Right click (new press only) with an empty crossbow -> switch to a loaded one.
-            if (useDown && !wasUseDown) {
+            // Holding sneak turns the swap off so you can charge the empty crossbow normally.
+            if (useDown && !wasUseDown && !sneakDown) {
                 trySwap(client);
             }
 
